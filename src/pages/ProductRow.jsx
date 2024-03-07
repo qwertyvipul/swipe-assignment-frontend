@@ -16,20 +16,6 @@ const ProductRow = ({ invoice, navigate }) => {
             <td className="fw-normal">Name 1</td>
             <td className="fw-normal">Description 1</td>
             <td className="fw-normal">Rate 1</td>
-            <td style={{ width: "5%" }}>
-                <Button variant="outline-primary">
-                    <div className="d-flex align-items-center justify-content-center gap-2">
-                        <BiSolidPencil />
-                    </div>
-                </Button>
-            </td>
-            <td style={{ width: "5%" }}>
-                <Button variant="danger">
-                    <div className="d-flex align-items-center justify-content-center gap-2">
-                        <BiTrash />
-                    </div>
-                </Button>
-            </td>
         </tr>
     );
 };
