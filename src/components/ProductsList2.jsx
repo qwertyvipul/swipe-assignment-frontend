@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useInvoiceListData } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
-import InvoiceRow from "../pages/InvoiceRow";
+import ProductRow from "../pages/ProductRow";
 
 const ProductsList2 = () => {
     return (
@@ -30,7 +30,11 @@ const ProductsList2 = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <ProductRow />
+                            <ProductRow />
+                            <ProductRow />
+                        </tbody>
                         <tbody></tbody>
                     </Table>
                 </Card>
