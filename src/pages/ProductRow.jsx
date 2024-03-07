@@ -9,13 +9,13 @@ import { useInvoiceListData } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
 
-const ProductRow = ({ invoice, navigate }) => {
+const ProductRow = ({ product }) => {
     return (
         <tr>
-            <td>1</td>
-            <td className="fw-normal">Name 1</td>
-            <td className="fw-normal">Description 1</td>
-            <td className="fw-normal">Rate 1</td>
+            <td>{product.id}</td>
+            <td className="fw-normal">{product.name}</td>
+            <td className="fw-normal">{product.description}</td>
+            <td className="fw-normal">{product.rate}</td>
         </tr>
     );
 };
