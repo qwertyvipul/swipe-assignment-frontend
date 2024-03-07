@@ -8,9 +8,51 @@ import ProductRow from "../pages/ProductRow";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useProductsListData } from "../redux/hooks";
+import { addProduct, updateProduct } from "../redux/productsSlice";
+import { useDispatch } from "react-redux";
 
 const ProductsList = () => {
+    const dispatch = useDispatch();
     const { productsList } = useProductsListData();
+    console.log(productsList);
+    const [formData, setFormData] = useState({
+        id: 0,
+        name: "",
+        description: "",
+        rate: "",
+    });
+
+    const handleEdit = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const resetFormData = () => {
+        setFormData({
+            id: 0,
+            name: "",
+            description: "",
+            rate: "",
+        });
+    };
+
+    const handleProductSelectChange = (value) => {
+        console.log({ value });
+        if (value === 0) {
+            resetFormData();
+        } else {
+            const product = productsList.find(
+                (product) => product.id === value
+            );
+            setFormData({ ...product });
+        }
+    };
+
+    const handleFormSubmit = () => {
+        if (formData.id === 0) {
+            dispatch(addProduct(formData));
+        }
+    };
+
     return (
         <Row>
             <Col md={8} lg={9}>
@@ -26,8 +68,11 @@ const ProductsList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {productsList.map((prodcut) => (
-                                <ProductRow product={prodcut} />
+                            {productsList.map((product) => (
+                                <ProductRow
+                                    product={product}
+                                    key={product.id}
+                                />
                             ))}
                         </tbody>
                         <tbody></tbody>
@@ -37,67 +82,75 @@ const ProductsList = () => {
             <Col md={4} lg={3}>
                 <div className="sticky-top pt-md-3 pt-xl-4">
                     <Form.Group className="mb-3">
-                        <Form.Label className="fw-bold">Currency:</Form.Label>
                         <Form.Select
                             className="btn btn-light my-1"
-                            aria-label="Change Currency"
+                            aria-label="Select Product"
+                            onChange={(e) =>
+                                handleProductSelectChange(
+                                    Number(e.target.value)
+                                )
+                            }
                         >
-                            <option value="new">Add product</option>
+                            <option value="0">Add new product</option>
                             {productsList.map((product) => (
-                                <option value={product.id}>
-                                    {product.name}
+                                <option value={product.id} key={product.id}>
+                                    Update: {product.name}
                                 </option>
                             ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="my-3">
-                        <Form.Label className="fw-bold">Tax rate:</Form.Label>
+                        <Form.Label className="fw-bold">Name: </Form.Label>
                         <InputGroup className="my-1 flex-nowrap">
                             <Form.Control
-                                name="taxRate"
-                                type="number"
-                                value="Hello"
+                                name="name"
+                                type="text"
+                                value={formData.name}
+                                onChange={handleEdit}
                                 className="bg-white border"
-                                placeholder="0.0"
-                                min="0.00"
-                                step="0.01"
-                                max="100.00"
+                                placeholder="Enter name"
                             />
-                            <InputGroup.Text className="bg-light fw-bold text-secondary small">
-                                %
-                            </InputGroup.Text>
                         </InputGroup>
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Label className="fw-bold">
-                            Discount rate:
+                            Description:
                         </Form.Label>
                         <InputGroup className="my-1 flex-nowrap">
                             <Form.Control
-                                name="discountRate"
+                                name="description"
+                                type="text"
+                                value={formData.description}
+                                onChange={handleEdit}
+                                className="bg-white border"
+                                placeholder="Enter description"
+                            />
+                        </InputGroup>
+                    </Form.Group>
+                    <Form.Group className="my-3">
+                        <Form.Label className="fw-bold">Rate:</Form.Label>
+                        <InputGroup className="my-1 flex-nowrap">
+                            <InputGroup.Text className="bg-light fw-bold text-secondary small">
+                                $
+                            </InputGroup.Text>
+                            <Form.Control
+                                name="rate"
                                 type="number"
-                                value="Value 2"
+                                value={formData.rate}
+                                onChange={handleEdit}
                                 className="bg-white border"
                                 placeholder="0.0"
                                 min="0.00"
                                 step="0.01"
-                                max="100.00"
                             />
-                            <InputGroup.Text className="bg-light fw-bold text-secondary small">
-                                %
-                            </InputGroup.Text>
                         </InputGroup>
                     </Form.Group>
-
-                    <Form.Control
-                        placeholder="Enter Invoice ID"
-                        name="copyId"
-                        value="Value 3"
-                        type="text"
-                        className="my-2 bg-white border"
-                    />
-                    <Button variant="primary" className="d-block">
-                        Copy Old Invoice
+                    <Button
+                        variant="primary"
+                        className="d-block"
+                        onClick={handleFormSubmit}
+                    >
+                        {formData.id === 0 ? "Add" : "Update"}
                     </Button>
                 </div>
             </Col>
