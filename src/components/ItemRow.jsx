@@ -4,6 +4,9 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import { Dropdown } from "react-bootstrap";
 
 const ItemRow = (props) => {
     const onDelEvent = () => {
@@ -12,6 +15,15 @@ const ItemRow = (props) => {
     return (
         <tr>
             <td style={{ width: "100%" }}>
+                <Form.Select
+                    aria-label="Default select example"
+                    className="bg-light fw-bold border-0 text-secondary px-2"
+                >
+                    <option>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </Form.Select>
                 <EditableField
                     onItemizedItemEdit={(evt) =>
                         props.onItemizedItemEdit(evt, props.item.itemId)
