@@ -14,13 +14,13 @@ import { useDispatch } from "react-redux";
 const ProductsList = () => {
     const dispatch = useDispatch();
     const { productsList } = useProductsListData();
-    console.log(productsList);
     const [formData, setFormData] = useState({
         id: 0,
         name: "",
         description: "",
         rate: "",
     });
+    const [validate, setValidate] = useState(false);
 
     const handleEdit = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,9 +48,20 @@ const ProductsList = () => {
     };
 
     const handleFormSubmit = () => {
-        if (formData.id === 0) {
-            dispatch(addProduct(formData));
+        let valid = true;
+        for (const key in formData) {
+            valid &= formData[key] !== "";
         }
+
+        if (valid) {
+            if (formData.id === 0) {
+                dispatch(addProduct(formData));
+                resetFormData();
+            } else {
+                dispatch(updateProduct(formData));
+            }
+        }
+        setValidate(!valid);
     };
 
     return (
@@ -109,6 +120,7 @@ const ProductsList = () => {
                                 onChange={handleEdit}
                                 className="bg-white border"
                                 placeholder="Enter name"
+                                isInvalid={validate && formData.name === ""}
                             />
                         </InputGroup>
                     </Form.Group>
@@ -124,6 +136,9 @@ const ProductsList = () => {
                                 onChange={handleEdit}
                                 className="bg-white border"
                                 placeholder="Enter description"
+                                isInvalid={
+                                    validate && formData.description === ""
+                                }
                             />
                         </InputGroup>
                     </Form.Group>
@@ -142,6 +157,7 @@ const ProductsList = () => {
                                 placeholder="0.0"
                                 min="0.00"
                                 step="0.01"
+                                isInvalid={validate && formData.rate === ""}
                             />
                         </InputGroup>
                     </Form.Group>

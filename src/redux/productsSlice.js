@@ -29,7 +29,7 @@ const productsSlice = createSlice({
                 (product) => product.id === action.payload.id
             );
             if (index !== -1) {
-                state[index] = action.payload.updatedProduct;
+                state[index] = action.payload;
             }
         },
     },
