@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,8 +10,12 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { useProductsListData } from "../redux/hooks";
 import { addProduct, updateProduct } from "../redux/productsSlice";
 import { useDispatch } from "react-redux";
+import ProductsTable from "./ProductsTable";
+
+let count = 0;
 
 const ProductsList = () => {
+    console.log(`Products list render count: ${++count}`);
     const dispatch = useDispatch();
     const { productsList } = useProductsListData();
     const [formData, setFormData] = useState({
@@ -26,17 +30,16 @@ const ProductsList = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const resetFormData = () => {
+    const resetFormData = useCallback(() => {
         setFormData({
             id: 0,
             name: "",
             description: "",
             rate: "",
         });
-    };
+    }, [setFormData]);
 
     const handleProductSelectChange = (value) => {
-        console.log({ value });
         if (value === 0) {
             resetFormData();
         } else {
@@ -66,30 +69,7 @@ const ProductsList = () => {
 
     return (
         <Row>
-            <Col md={8} lg={9}>
-                <Card className="p-4 p-xl-5 my-3 my-xl-4">
-                    <h3 className="fw-bold pb-2 pb-md-4">Products List</h3>
-                    <Table responsive>
-                        <thead>
-                            <tr>
-                                <th>Product ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {productsList.map((product) => (
-                                <ProductRow
-                                    product={product}
-                                    key={product.id}
-                                />
-                            ))}
-                        </tbody>
-                        <tbody></tbody>
-                    </Table>
-                </Card>
-            </Col>
+            <ProductsTable products={productsList} />
             <Col md={4} lg={3}>
                 <div className="sticky-top pt-md-3 pt-xl-4">
                     <Form.Group className="mb-3">
