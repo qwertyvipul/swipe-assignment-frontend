@@ -2,6 +2,8 @@
 
 - Deployed at:
   [https://swipe-assignment-frontend.qwertyvipul.io/](https://swipe-assignment-frontend.qwertyvipul.io/)
+- View changes at:
+  [https://github.com/qwertyvipul/swipe-assignment-frontend/commit/160821e35e3f6a9acd40b8010915daaf0b68b25d](https://github.com/qwertyvipul/swipe-assignment-frontend/commit/160821e35e3f6a9acd40b8010915daaf0b68b25d)
 
 ## Quick summary of work done
 
