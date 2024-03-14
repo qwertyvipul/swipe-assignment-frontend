@@ -1,7 +1,7 @@
 # swipe-assignment-frontend
 
 - Deployed at:
-  [http://swipe-assignment-frontend.qwertyvipul.io/](http://swipe-assignment-frontend.qwertyvipul.io/)
+  [https://swipe-assignment-frontend.qwertyvipul.io/](https://swipe-assignment-frontend.qwertyvipul.io/)
 
 ## Quick summary of work done
 
