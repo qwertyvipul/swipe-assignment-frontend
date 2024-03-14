@@ -15,6 +15,7 @@ import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
 import { useProductsListData } from "../redux/hooks";
+import { nextInvoiceId } from "../redux/invoicesSlice";
 
 const defaultItem = {
     id: 0,
@@ -22,6 +23,28 @@ const defaultItem = {
     description: "",
     quantity: 0,
     rate: 0,
+};
+
+const newInvoice = {
+    id: generateRandomId(),
+    currentDate: new Date().toLocaleDateString(),
+    invoiceNumber: nextInvoiceId(),
+    dateOfIssue: "",
+    billTo: "",
+    billToEmail: "",
+    billToAddress: "",
+    billFrom: "",
+    billFromEmail: "",
+    billFromAddress: "",
+    notes: "",
+    total: "0.00",
+    subTotal: "0.00",
+    taxRate: "",
+    taxAmount: "0.00",
+    discountRate: "",
+    discountAmount: "0.00",
+    currency: "$",
+    items: [defaultItem],
 };
 
 const InvoiceForm = () => {
@@ -47,27 +70,21 @@ const InvoiceForm = () => {
                   invoiceNumber: listSize + 1,
               }
             : {
-                  id: generateRandomId(),
-                  currentDate: new Date().toLocaleDateString(),
-                  invoiceNumber: listSize + 1,
-                  dateOfIssue: "",
-                  billTo: "",
-                  billToEmail: "",
-                  billToAddress: "",
-                  billFrom: "",
-                  billFromEmail: "",
-                  billFromAddress: "",
-                  notes: "",
-                  total: "0.00",
-                  subTotal: "0.00",
-                  taxRate: "",
-                  taxAmount: "0.00",
-                  discountRate: "",
-                  discountAmount: "0.00",
-                  currency: "$",
-                  items: [defaultItem],
+                  ...newInvoice,
               }
     );
+
+    useEffect(() => {
+        if (isEdit) {
+            setFormData(getOneInvoice(params.id));
+        } else if (isCopy && params.id) {
+            setFormData({
+                ...getOneInvoice(params.id),
+                id: nextInvoiceId(),
+                invoiceNumber: listSize + 1,
+            });
+        }
+    }, []);
 
     const addedItems = formData.items.map((item) => item.id);
     const availableItems = productsList.filter(

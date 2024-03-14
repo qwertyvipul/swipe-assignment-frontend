@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { autoIncrement } from "../utils/generateAutoIncrementId";
+
+export const nextInvoiceId = autoIncrement();
 
 const invoicesSlice = createSlice({
     name: "invoices",

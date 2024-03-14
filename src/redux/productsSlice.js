@@ -1,17 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { autoIncrement } from "../utils/generateAutoIncrementId";
 
-const autoIncrement = () => {
-    let id = 0;
-    return () => ++id;
-};
-
-const idGenerator = autoIncrement();
+const getAutoIncrementId = autoIncrement();
 
 const productsSlice = createSlice({
     name: "products",
     initialState: [
         ...[1, 2, 3].map((_) => {
-            const id = idGenerator();
+            const id = getAutoIncrementId();
             return {
                 id,
                 name: `Product ${id}`,
@@ -22,7 +18,7 @@ const productsSlice = createSlice({
     ],
     reducers: {
         addProduct: (state, action) => {
-            state.push({ ...action.payload, id: idGenerator() });
+            state.push({ ...action.payload, id: getAutoIncrementId() });
         },
         updateProduct: (state, action) => {
             const index = state.findIndex(
