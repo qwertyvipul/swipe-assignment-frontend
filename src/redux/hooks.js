@@ -3,45 +3,45 @@ import { selectInvoiceList } from "./invoicesSlice";
 import { selectProductList } from "./productsSlice";
 
 export const useInvoiceListData = () => {
-    const invoiceList = useSelector(selectInvoiceList);
-    const productsList = useSelector(selectProductList);
+  const invoiceList = useSelector(selectInvoiceList);
+  const productsList = useSelector(selectProductList);
 
-    const getOneInvoice = (receivedId) => {
-        const invoice =
-            invoiceList.find(
-                (invoice) => invoice.id.toString() === receivedId.toString()
-            ) || null;
+  const getOneInvoice = (receivedId) => {
+    const invoice =
+      invoiceList.find(
+        (invoice) => invoice.id.toString() === receivedId.toString(),
+      ) || null;
 
-        const productsInInvoice = [];
-        const idQuantity = {};
-        invoice.items.forEach((item) => {
-            idQuantity[item.id] = item.quantity;
+    const productsInInvoice = [];
+    const idQuantity = {};
+    invoice.items.forEach((item) => {
+      idQuantity[item.id] = item.quantity;
+    });
+    productsList.forEach((product) => {
+      if (idQuantity.hasOwnProperty(product.id)) {
+        productsInInvoice.push({
+          ...product,
+          quantity: idQuantity[product.id],
         });
-        productsList.forEach((product) => {
-            if (idQuantity.hasOwnProperty(product.id)) {
-                productsInInvoice.push({
-                    ...product,
-                    quantity: idQuantity[product.id],
-                });
-            }
-        });
-        console.log({ productsInInvoice });
-        return { ...invoice, items: productsInInvoice };
-    };
+      }
+    });
+    console.log({ productsInInvoice });
+    return { ...invoice, items: productsInInvoice };
+  };
 
-    const listSize = invoiceList.length;
+  const listSize = invoiceList.length;
 
-    return {
-        invoiceList,
-        getOneInvoice,
-        listSize,
-    };
+  return {
+    invoiceList,
+    getOneInvoice,
+    listSize,
+  };
 };
 
 export const useProductsListData = () => {
-    const productsList = useSelector(selectProductList);
+  const productsList = useSelector(selectProductList);
 
-    return {
-        productsList,
-    };
+  return {
+    productsList,
+  };
 };

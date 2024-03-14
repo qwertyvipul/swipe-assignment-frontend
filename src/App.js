@@ -7,18 +7,18 @@ import Invoice from "./pages/Invoice";
 import InvoiceList from "./pages/InvoiceList";
 
 const App = () => {
-    return (
-        <div className="App">
-            <Container>
-                <Routes>
-                    <Route path="/" element={<InvoiceList />} />
-                    <Route path="/create" element={<Invoice />} />
-                    <Route path="/create/:id" element={<Invoice />} />
-                    <Route path="/edit/:id" element={<Invoice />} />
-                </Routes>
-            </Container>
-        </div>
-    );
+  return (
+    <div className="App">
+      <Container>
+        <Routes>
+          <Route path="/" element={<InvoiceList />} />
+          <Route path="/create" element={<Invoice />} />
+          <Route path="/create/:id" element={<Invoice />} />
+          <Route path="/edit/:id" element={<Invoice />} />
+        </Routes>
+      </Container>
+    </div>
+  );
 };
 
 export default App;
