@@ -12,7 +12,7 @@
 4. All other already existing features works as previous and I have tried my
    best to limit the changes made in the existing codebase to minimal.
 
-## Requirements
+## Requirements checklist
 
 - [x] Implement a Products Tab:
   - [x] When creating an invoice, ensure all associated products are displayed
