@@ -7,19 +7,52 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import InvoiceItem from "./InvoiceItem";
 import InvoiceModal from "./InvoiceModal";
-import { BiArrowBack } from "react-icons/bi";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { updateProduct } from "../redux/productsSlice";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
+import { useProductsListData } from "../redux/hooks";
+
+// Default values from new item
+const defaultItem = {
+  id: 0,
+  name: "",
+  description: "",
+  quantity: 0,
+  rate: 0,
+};
+
+// Default values for new invoice
+const newInvoice = {
+  currentDate: new Date().toLocaleDateString(),
+  dateOfIssue: "",
+  billTo: "",
+  billToEmail: "",
+  billToAddress: "",
+  billFrom: "",
+  billFromEmail: "",
+  billFromAddress: "",
+  notes: "",
+  total: "0.00",
+  subTotal: "0.00",
+  taxRate: "",
+  taxAmount: "0.00",
+  discountRate: "",
+  discountAmount: "0.00",
+  currency: "$",
+  items: [defaultItem],
+};
 
 const InvoiceForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { productsList } = useProductsListData();
+
   const isCopy = location.pathname.includes("create");
   const isEdit = location.pathname.includes("edit");
 
@@ -32,66 +65,58 @@ const InvoiceForm = () => {
       : isCopy && params.id
       ? {
           ...getOneInvoice(params.id),
-          id: generateRandomId(),
           invoiceNumber: listSize + 1,
         }
-      : {
-          id: generateRandomId(),
-          currentDate: new Date().toLocaleDateString(),
-          invoiceNumber: listSize + 1,
-          dateOfIssue: "",
-          billTo: "",
-          billToEmail: "",
-          billToAddress: "",
-          billFrom: "",
-          billFromEmail: "",
-          billFromAddress: "",
-          notes: "",
-          total: "0.00",
-          subTotal: "0.00",
-          taxRate: "",
-          taxAmount: "0.00",
-          discountRate: "",
-          discountAmount: "0.00",
-          currency: "$",
-          items: [
-            {
-              itemId: 0,
-              itemName: "",
-              itemDescription: "",
-              itemPrice: "1.00",
-              itemQuantity: 1,
-            },
-          ],
-        }
+      : { ...newInvoice, invoiceNumber: listSize + 1 }
+  );
+
+  const addedItems = formData.items.map((item) => item.id);
+  const availableItems = productsList.filter(
+    (product) => !addedItems.includes(product.id)
   );
 
   useEffect(() => {
     handleCalculateTotal();
   }, []);
 
-  const handleRowDel = (itemToDelete) => {
-    const updatedItems = formData.items.filter(
-      (item) => item.itemId !== itemToDelete.itemId
-    );
+  const handleRowDelete = (id) => {
+    const updatedItems = formData.items.filter((item) => item.id !== id);
     setFormData({ ...formData, items: updatedItems });
     handleCalculateTotal();
   };
 
+  // New items cannot be added be all products have already been added to the invoice
+  const disableAdd = addedItems.includes(0) || availableItems.length === 0;
+
   const handleAddEvent = () => {
-    const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
-    const newItem = {
-      itemId: id,
-      itemName: "",
-      itemDescription: "",
-      itemPrice: "1.00",
-      itemQuantity: 1,
-    };
-    setFormData({
-      ...formData,
-      items: [...formData.items, newItem],
+    if (!disableAdd) {
+      setFormData({
+        ...formData,
+        items: [...formData.items, defaultItem],
+      });
+      handleCalculateTotal();
+    }
+  };
+
+  /**
+   * Handle product selection change
+   * @param {Number} prevId
+   * @param {Number} newId
+   */
+  const handleOptionSelect = (prevId, newId) => {
+    setFormData((prevData) => {
+      const newItems = prevData.items.map((item) => {
+        if (item.id === prevId) {
+          return {
+            ...productsList.find((product) => product.id === newId),
+            quantity: 0,
+          };
+        } else {
+          return item;
+        }
+      });
+      return { ...prevData, items: newItems };
     });
-    handleCalculateTotal();
   };
 
   const handleCalculateTotal = () => {
@@ -99,8 +124,7 @@ const InvoiceForm = () => {
       let subTotal = 0;
 
       prevFormData.items.forEach((item) => {
-        subTotal +=
-          parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity);
+        subTotal += parseFloat(item.rate).toFixed(2) * parseInt(item.quantity);
       });
 
       const taxAmount = parseFloat(
@@ -127,7 +151,7 @@ const InvoiceForm = () => {
 
   const onItemizedItemEdit = (evt, id) => {
     const updatedItems = formData.items.map((oldItem) => {
-      if (oldItem.itemId === id) {
+      if (oldItem.id === id) {
         return { ...oldItem, [evt.target.name]: evt.target.value };
       }
       return oldItem;
@@ -157,6 +181,13 @@ const InvoiceForm = () => {
   };
 
   const handleAddInvoice = () => {
+    formData.items.forEach((item) => {
+      if (item.id !== 0) {
+        const { id, name, description, rate } = item;
+        dispatch(updateProduct({ id, name, description, rate }));
+      }
+    });
+
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
       alert("Invoice updated successfuly 🥳");
@@ -185,15 +216,6 @@ const InvoiceForm = () => {
 
   return (
     <Form onSubmit={openModal}>
-      <div className="d-flex align-items-center">
-        <BiArrowBack size={18} />
-        <div className="fw-bold mt-1 mx-2 cursor-pointer">
-          <Link to="/">
-            <h5>Go Back</h5>
-          </Link>
-        </div>
-      </div>
-
       <Row>
         <Col md={8} lg={9}>
           <Card className="p-4 p-xl-5 my-3 my-xl-4">
@@ -303,10 +325,13 @@ const InvoiceForm = () => {
             </Row>
             <InvoiceItem
               onItemizedItemEdit={onItemizedItemEdit}
+              onOptionSelect={handleOptionSelect}
               onRowAdd={handleAddEvent}
-              onRowDel={handleRowDel}
+              onRowDelete={handleRowDelete}
               currency={formData.currency}
               items={formData.items}
+              options={availableItems}
+              disableAdd={disableAdd}
             />
             <Row className="mt-4 justify-content-end">
               <Col lg={6}>
@@ -408,7 +433,9 @@ const InvoiceForm = () => {
               <Form.Label className="fw-bold">Currency:</Form.Label>
               <Form.Select
                 onChange={(event) =>
-                  onCurrencyChange({ currency: event.target.value })
+                  onCurrencyChange({
+                    currency: event.target.value,
+                  })
                 }
                 className="btn btn-light my-1"
                 aria-label="Change Currency"
