@@ -11,6 +11,7 @@ import { BiArrowBack } from "react-icons/bi";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
+import { updateProduct } from "../redux/productsSlice";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
@@ -26,7 +27,6 @@ const defaultItem = {
 };
 
 const newInvoice = {
-    id: generateRandomId(),
     currentDate: new Date().toLocaleDateString(),
     invoiceNumber: nextInvoiceId(),
     dateOfIssue: "",
@@ -60,19 +60,10 @@ const InvoiceForm = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [copyId, setCopyId] = useState("");
     const { getOneInvoice, listSize } = useInvoiceListData();
-    const [formData, setFormData] = useState(
-        isEdit
-            ? getOneInvoice(params.id)
-            : isCopy && params.id
-            ? {
-                  ...getOneInvoice(params.id),
-                  id: generateRandomId(),
-                  invoiceNumber: listSize + 1,
-              }
-            : {
-                  ...newInvoice,
-              }
-    );
+    const [formData, setFormData] = useState({
+        ...newInvoice,
+        id: nextInvoiceId(),
+    });
 
     useEffect(() => {
         if (isEdit) {
@@ -192,6 +183,13 @@ const InvoiceForm = () => {
     };
 
     const handleAddInvoice = () => {
+        formData.items.forEach((item) => {
+            if (item.id !== 0) {
+                const { id, name, description, rate } = item;
+                dispatch(updateProduct({ id, name, description, rate }));
+            }
+        });
+
         if (isEdit) {
             dispatch(
                 updateInvoice({ id: params.id, updatedInvoice: formData })

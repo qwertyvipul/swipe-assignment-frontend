@@ -25,7 +25,7 @@ export const useInvoiceListData = () => {
                 });
             }
         });
-        console.log(productsInInvoice);
+        console.log({ productsInInvoice });
         return { ...invoice, items: productsInInvoice };
     };
 

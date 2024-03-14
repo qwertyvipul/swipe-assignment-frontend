@@ -3,34 +3,39 @@ import { autoIncrement } from "../utils/generateAutoIncrementId";
 
 export const nextInvoiceId = autoIncrement();
 
+const formatInvoice = (invoice) => {
+    const itemsAndQuantity = invoice.items
+        .filter((item) => item.id !== 0)
+        .map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+        }));
+
+    const formattedInvoice = {
+        ...invoice,
+        items: itemsAndQuantity,
+    };
+    console.log(formattedInvoice);
+    return formattedInvoice;
+};
+
 const invoicesSlice = createSlice({
     name: "invoices",
     initialState: [],
     reducers: {
         addInvoice: (state, action) => {
-            const itemsAndQuantity = action.payload.items
-                .filter((item) => item.id !== 0)
-                .map((item) => ({
-                    id: item.id,
-                    quantity: item.quantity,
-                }));
-            console.log(itemsAndQuantity);
-            const invoice = {
-                ...action.payload,
-                items: itemsAndQuantity,
-            };
-            console.log(invoice);
-            state.push(invoice);
+            state.push(formatInvoice(action.payload));
         },
         deleteInvoice: (state, action) => {
             return state.filter((invoice) => invoice.id !== action.payload);
         },
         updateInvoice: (state, action) => {
-            const index = state.findIndex(
-                (invoice) => invoice.id === action.payload.id
-            );
+            const index = state.findIndex((invoice) => {
+                console.log({ invoice });
+                return invoice.id === Number(action.payload.id);
+            });
             if (index !== -1) {
-                state[index] = action.payload.updatedInvoice;
+                state[index] = formatInvoice(action.payload.updatedInvoice);
             }
         },
     },
