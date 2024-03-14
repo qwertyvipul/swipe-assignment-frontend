@@ -15,7 +15,6 @@ const formatInvoice = (invoice) => {
     ...invoice,
     items: itemsAndQuantity,
   };
-  console.log(formattedInvoice);
   return formattedInvoice;
 };
 
@@ -31,7 +30,6 @@ const invoicesSlice = createSlice({
     },
     updateInvoice: (state, action) => {
       const index = state.findIndex((invoice) => {
-        console.log({ invoice });
         return invoice.id === Number(action.payload.id);
       });
       if (index !== -1) {

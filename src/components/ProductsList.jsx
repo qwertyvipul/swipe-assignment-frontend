@@ -13,7 +13,6 @@ import ProductsTable from "./ProductsTable";
 let count = 0;
 
 const ProductsList = () => {
-  console.log(`Products list render count: ${++count}`);
   const dispatch = useDispatch();
   const { productsList } = useProductsListData();
   const [formData, setFormData] = useState({

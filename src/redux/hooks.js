@@ -9,7 +9,7 @@ export const useInvoiceListData = () => {
   const getOneInvoice = (receivedId) => {
     const invoice =
       invoiceList.find(
-        (invoice) => invoice.id.toString() === receivedId.toString(),
+        (invoice) => invoice.id.toString() === receivedId.toString()
       ) || null;
 
     const productsInInvoice = [];
@@ -25,7 +25,6 @@ export const useInvoiceListData = () => {
         });
       }
     });
-    console.log({ productsInInvoice });
     return { ...invoice, items: productsInInvoice };
   };
 

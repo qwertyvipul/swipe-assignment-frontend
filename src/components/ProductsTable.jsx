@@ -6,7 +6,6 @@ import Table from "react-bootstrap/Table";
 import ProductRow from "./ProductRow";
 
 const ProductsTable = ({ products }) => {
-  console.log("Products table");
   return (
     <Col md={8} lg={9}>
       <Card className="p-4 p-xl-5 my-3 my-xl-4">
