@@ -13,10 +13,13 @@ export const useInvoiceListData = () => {
       ) || null;
 
     const productsInInvoice = [];
-    const idQuantity = {};
+    const idQuantity = {}; // For O(1) data access
+
     invoice.items.forEach((item) => {
       idQuantity[item.id] = item.quantity;
     });
+
+    // Populate item ids with corresponding products
     productsList.forEach((product) => {
       if (idQuantity.hasOwnProperty(product.id)) {
         productsInInvoice.push({

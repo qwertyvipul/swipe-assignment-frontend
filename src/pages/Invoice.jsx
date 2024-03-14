@@ -6,6 +6,9 @@ import { BiArrowBack } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import ProductsList from "../components/ProductsList";
 
+/**
+ * Contains two tabs - Invoice and Products
+ */
 const Invoice = () => {
   return (
     <div>

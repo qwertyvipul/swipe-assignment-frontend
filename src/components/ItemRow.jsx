@@ -4,6 +4,7 @@ import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
 import Form from "react-bootstrap/Form";
 
+// Modularized out of `InvoiceItem` from original codebase.
 const ItemRow = ({ products, onOptionSelect, item, onDelete, ...props }) => {
   const handleSelect = (selected) => {
     onOptionSelect(item.id, selected);

@@ -3,6 +3,7 @@ import { autoIncrement } from "../utils/generateAutoIncrementId";
 
 export const nextInvoiceId = autoIncrement();
 
+// Format invoice to just list product ids to maintain single source of truth
 const formatInvoice = (invoice) => {
   const itemsAndQuantity = invoice.items
     .filter((item) => item.id !== 0)

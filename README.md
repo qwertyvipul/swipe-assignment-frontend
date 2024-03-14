@@ -37,7 +37,7 @@
 - [x] Maintain clean, well-documented, and modular code for the new feature in
       line with existing standards.
 
-## Features
+## Screenshots
 
 ### Products tab
 

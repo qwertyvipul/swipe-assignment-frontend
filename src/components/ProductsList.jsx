@@ -10,8 +10,9 @@ import { addProduct, updateProduct } from "../redux/productsSlice";
 import { useDispatch } from "react-redux";
 import ProductsTable from "./ProductsTable";
 
-let count = 0;
-
+/**
+ * Products tab content
+ */
 const ProductsList = () => {
   const dispatch = useDispatch();
   const { productsList } = useProductsListData();
@@ -27,6 +28,9 @@ const ProductsList = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Reset form data with default values
+   */
   const resetFormData = useCallback(() => {
     setFormData({
       id: 0,
@@ -36,6 +40,10 @@ const ProductsList = () => {
     });
   }, [setFormData]);
 
+  /**
+   * Handle product selection change (Add or update)
+   * @param {Number} value
+   */
   const handleProductSelectChange = (value) => {
     if (value === 0) {
       resetFormData();

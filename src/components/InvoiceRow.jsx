@@ -6,6 +6,7 @@ import InvoiceModal from "./InvoiceModal";
 import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
 
+// Modularized out of `InvoiceList` from original codebase.
 const InvoiceRow = ({ invoice, navigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();

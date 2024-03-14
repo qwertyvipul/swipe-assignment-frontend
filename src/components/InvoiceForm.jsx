@@ -17,6 +17,7 @@ import { useInvoiceListData } from "../redux/hooks";
 import { useProductsListData } from "../redux/hooks";
 import { nextInvoiceId } from "../redux/invoicesSlice";
 
+// Default values from new item
 const defaultItem = {
   id: 0,
   name: "",
@@ -25,6 +26,7 @@ const defaultItem = {
   rate: 0,
 };
 
+// Default values for new invoice
 const newInvoice = {
   currentDate: new Date().toLocaleDateString(),
   invoiceNumber: nextInvoiceId(),
@@ -86,8 +88,11 @@ const InvoiceForm = () => {
     handleCalculateTotal();
   };
 
+  // New items cannot be added be all products have already been added to the invoice
+  const disableAdd = addedItems.includes(0) || availableItems.length === 0;
+
   const handleAddEvent = () => {
-    if (!addedItems.includes(0) && availableItems.length > 0) {
+    if (!disableAdd) {
       setFormData({
         ...formData,
         items: [...formData.items, defaultItem],
@@ -96,8 +101,11 @@ const InvoiceForm = () => {
     }
   };
 
-  const disableAdd = addedItems.includes(0) || availableItems.length === 0;
-
+  /**
+   * Handle product selection change
+   * @param {Number} prevId
+   * @param {Number} newId
+   */
   const handleOptionSelect = (prevId, newId) => {
     setFormData((prevData) => {
       const newItems = prevData.items.map((item) => {

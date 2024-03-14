@@ -9,9 +9,11 @@ const InvoiceItem = ({
   onOptionSelect,
   onRowDelete,
   disableAdd,
-  ...props
+  onItemizedItemEdit,
+  currency,
+  items,
+  onRowAdd,
 }) => {
-  const { onItemizedItemEdit, currency, items, onRowAdd } = props;
   const itemTable = items.map((item) => (
     <ItemRow
       key={item.id}
