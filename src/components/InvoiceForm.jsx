@@ -59,22 +59,17 @@ const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [copyId, setCopyId] = useState("");
   const { getOneInvoice, listSize } = useInvoiceListData();
-  const [formData, setFormData] = useState({
-    ...newInvoice,
-    id: nextInvoiceId(),
-  });
-
-  useEffect(() => {
-    if (isEdit) {
-      setFormData(getOneInvoice(params.id));
-    } else if (isCopy && params.id) {
-      setFormData({
-        ...getOneInvoice(params.id),
-        id: nextInvoiceId(),
-        invoiceNumber: listSize + 1,
-      });
-    }
-  }, []);
+  const [formData, setFormData] = useState(
+    isEdit
+      ? getOneInvoice(params.id)
+      : isCopy && params.id
+      ? {
+          ...getOneInvoice(params.id),
+          id: nextInvoiceId(),
+          invoiceNumber: listSize + 1,
+        }
+      : { ...newInvoice, id: nextInvoiceId() }
+  );
 
   const addedItems = formData.items.map((item) => item.id);
   const availableItems = productsList.filter(
