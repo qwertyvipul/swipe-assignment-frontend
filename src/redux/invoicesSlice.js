@@ -8,7 +8,19 @@ const invoicesSlice = createSlice({
     initialState: [],
     reducers: {
         addInvoice: (state, action) => {
-            state.push(action.payload);
+            const itemsAndQuantity = action.payload.items
+                .filter((item) => item.id !== 0)
+                .map((item) => ({
+                    id: item.id,
+                    quantity: item.quantity,
+                }));
+            console.log(itemsAndQuantity);
+            const invoice = {
+                ...action.payload,
+                items: itemsAndQuantity,
+            };
+            console.log(invoice);
+            state.push(invoice);
         },
         deleteInvoice: (state, action) => {
             return state.filter((invoice) => invoice.id !== action.payload);
