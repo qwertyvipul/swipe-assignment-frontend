@@ -7,12 +7,11 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import InvoiceItem from "./InvoiceItem";
 import InvoiceModal from "./InvoiceModal";
-import { BiArrowBack } from "react-icons/bi";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
 import { updateProduct } from "../redux/productsSlice";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
 import { useProductsListData } from "../redux/hooks";
@@ -79,7 +78,7 @@ const InvoiceForm = () => {
 
   const addedItems = formData.items.map((item) => item.id);
   const availableItems = productsList.filter(
-    (product) => !addedItems.includes(product.id),
+    (product) => !addedItems.includes(product.id)
   );
 
   useEffect(() => {
@@ -129,10 +128,10 @@ const InvoiceForm = () => {
       });
 
       const taxAmount = parseFloat(
-        subTotal * (prevFormData.taxRate / 100),
+        subTotal * (prevFormData.taxRate / 100)
       ).toFixed(2);
       const discountAmount = parseFloat(
-        subTotal * (prevFormData.discountRate / 100),
+        subTotal * (prevFormData.discountRate / 100)
       ).toFixed(2);
       const total = (
         subTotal -

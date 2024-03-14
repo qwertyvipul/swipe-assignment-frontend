@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import { BiTrash } from "react-icons/bi";
-import EditableField from "./EditableField";
 import ItemRow from "./ItemRow";
-import { useProductsListData } from "../redux/hooks";
 
 const InvoiceItem = ({
   options,

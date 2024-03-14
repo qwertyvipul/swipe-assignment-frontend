@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import { Dropdown } from "react-bootstrap";
 
 const ItemRow = ({ products, onOptionSelect, item, onDelete, ...props }) => {
   const handleSelect = (selected) => {

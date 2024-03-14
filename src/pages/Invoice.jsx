@@ -3,10 +3,7 @@ import InvoiceForm from "../components/InvoiceForm";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { BiArrowBack } from "react-icons/bi";
-import InputGroup from "react-bootstrap/InputGroup";
-import { useDispatch } from "react-redux";
-import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ProductsList from "../components/ProductsList";
 
 const Invoice = () => {
