@@ -1,53 +1,60 @@
 # swipe-assignment-frontend
 
-## About the project
+- Deployed at:
+  [http://swipe-assignment-frontend.qwertyvipul.io/](http://swipe-assignment-frontend.qwertyvipul.io/)
 
-1. It is created using react (version 17) and redux (version 4).
+## Quick summary of work done
 
-## Setup Instructions
+1. Have implemented the products tab and all related features as per the
+   requirement.
+2. Have skipped grouping feature due to time constraints.
+3. Have written clean, well-documented and modular code for the new features.
+4. All other already existing features works as previous and I have tried my
+   best to limit the changes made in the existing codebase to minimal.
 
-```bash
-npm install
-npm start
-```
+## Requirements
 
-## Pages
+- [x] Implement a Products Tab:
+  - [x] When creating an invoice, ensure all associated products are displayed
+        in a new 'Products' tab using Redux.
+  - [x] The tab should allow users to modify product information, and these
+        changes should be reflected in all associated invoices.
+- [x] Dynamic Product Information Update:
+  - [x] If a product already used in previous invoices is edited, the updated
+        details should reflect both in the 'Products' tab and in all existing
+        invoices where it's used.
+  - [x] If a product is added to a new invoice with different values than the
+        already stored values, update its details in the products tab and all
+        invoices where it appears.
+- [x] Implement validation for any changes made in the products tab. Ensure the
+      Redux store is updated accordingly to maintain application state
+      consistency
+- [x] Design the new products tab and invoice creation interface to be intuitive
+      and clear, highlighting available user actions.
+- [ ] Grouping of Products in Invoice Creation
+- [x] The application should properly handle any errors during invoice creation
+      and provide appropriate feedback to the user.
+- [x] Maintain clean, well-documented, and modular code for the new feature in
+      line with existing standards.
 
-1. `/`
-   1. No invoices present
-   2. Create invoice CTA
-2. `/create`
-   1. Form
-      1. Current data
-      2. Invoice number
-      3. Due date
-      4. Bill details:
-         1. To
-         2. From
-      5. Item
-         1. Name 
-         2. Description
-         3. Qty
-         4. Price
-         5. Action
-      6. Add button
-   2. Bill calculation
-   3. Add invoice
-   4. Review invoice
+## Features
 
-## Feature requests
+### Products tab
 
-1. Implement a products tab
-   1. ? Is it a new page or a new section in the create invoice page.
-      1. ? If it is a new page, where will the go to page link stay, in the home page or the create invoice page
-      2. ? Should there be an edit for edit action, it should be editable by default just like in view invoice page
-   2. ? What are all the product information?
-      1. ? Is it just name, description and rate
-      2. ? Are the items actually product
-      3. ? Do we also want to create an inventory
-   3. ? Grouping of products
-      1. ? Can we name the groups
-      2. ? Can a product be in multiple groups
-   4. ? What sort of validation do we want for the changes
-   5. ? Do we also have 
-   6. ? Will random filling of values crate a new product
+#### Add Product
+
+![Add product](./images/add-product.png)
+
+#### Update product
+
+![Update product](./images/update-product.png)
+
+### Invoice tab
+
+#### Add products to invoice
+
+![Add products to invoice](./images/invoice-add-product.png)
+
+#### Update product data from invoice
+
+![Update product data from invoice](./images/invoice-update-product.png)
