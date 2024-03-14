@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
 import ItemRow from "./ItemRow";
+import { useProductsListData } from "../redux/hooks";
 
-const InvoiceItem = (props) => {
-    const { onItemizedItemEdit, currency, onRowDel, items, onRowAdd } = props;
-
+const InvoiceItem = ({
+    options,
+    onOptionSelect,
+    onRowDelete,
+    disableAdd,
+    ...props
+}) => {
+    const { onItemizedItemEdit, currency, items, onRowAdd } = props;
     const itemTable = items.map((item) => (
         <ItemRow
             key={item.id}
             item={item}
-            onDelEvent={onRowDel}
+            onDelete={onRowDelete}
             onItemizedItemEdit={onItemizedItemEdit}
             currency={currency}
+            products={options}
+            onOptionSelect={onOptionSelect}
         />
     ));
 
@@ -32,7 +40,10 @@ const InvoiceItem = (props) => {
                 </thead>
                 <tbody>{itemTable}</tbody>
             </Table>
-            <Button className="fw-bold" onClick={onRowAdd}>
+            <Button
+                className={`fw-bold ${disableAdd ? "disabled" : ""}`}
+                onClick={onRowAdd}
+            >
                 Add Item
             </Button>
         </div>

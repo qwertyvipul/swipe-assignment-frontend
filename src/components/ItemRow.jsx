@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -8,83 +8,90 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { Dropdown } from "react-bootstrap";
 
-const ItemRow = (props) => {
-    const onDelEvent = () => {
-        props.onDelEvent(props.item);
+const ItemRow = ({ products, onOptionSelect, item, onDelete, ...props }) => {
+    const handleSelect = (selected) => {
+        onOptionSelect(item.id, selected);
     };
+
     return (
         <tr>
             <td style={{ width: "100%" }}>
                 <Form.Select
                     aria-label="Default select example"
                     className="bg-light fw-bold border-0 text-secondary px-2"
+                    onChange={(e) => handleSelect(Number(e.target.value))}
+                    value={"Current Item"}
                 >
-                    <option>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option>
+                        {item.id === 0 ? "Select product to add" : item.name}
+                    </option>
+                    {products.map((option) => (
+                        <option value={option.id} key={option.id}>
+                            {option.name || "Select a product"}
+                        </option>
+                    ))}
                 </Form.Select>
                 <EditableField
-                    onItemizedItemEdit={(evt) =>
-                        props.onItemizedItemEdit(evt, props.item.itemId)
+                    onItemizedItemEdit={(e) =>
+                        props.onItemizedItemEdit(e, item.id)
                     }
                     cellData={{
                         type: "text",
-                        name: "itemName",
+                        name: "name",
                         placeholder: "Item name",
-                        value: props.item.itemName,
-                        id: props.item.itemId,
+                        value: item.name,
+                        id: item.id,
                     }}
                 />
                 <EditableField
-                    onItemizedItemEdit={(evt) =>
-                        props.onItemizedItemEdit(evt, props.item.itemId)
+                    onItemizedItemEdit={(e) =>
+                        props.onItemizedItemEdit(e, item.id)
                     }
                     cellData={{
                         type: "text",
-                        name: "itemDescription",
+                        name: "description",
                         placeholder: "Item description",
-                        value: props.item.itemDescription,
-                        id: props.item.itemId,
+                        value: item.description,
+                        id: item.id,
                     }}
                 />
             </td>
             <td style={{ minWidth: "70px" }}>
                 <EditableField
-                    onItemizedItemEdit={(evt) =>
-                        props.onItemizedItemEdit(evt, props.item.itemId)
+                    onItemizedItemEdit={(e) =>
+                        props.onItemizedItemEdit(e, item.id)
                     }
                     cellData={{
                         type: "number",
-                        name: "itemQuantity",
-                        min: 1,
+                        name: "quantity",
+                        min: 0,
                         step: "1",
-                        value: props.item.itemQuantity,
-                        id: props.item.itemId,
+                        value: item.quantity,
+                        id: item.id,
                     }}
                 />
             </td>
             <td style={{ minWidth: "130px" }}>
                 <EditableField
-                    onItemizedItemEdit={(evt) =>
-                        props.onItemizedItemEdit(evt, props.item.itemId)
+                    onItemizedItemEdit={(e) =>
+                        props.onItemizedItemEdit(e, item.id)
                     }
                     cellData={{
                         leading: props.currency,
                         type: "number",
-                        name: "itemPrice",
-                        min: 1,
+                        name: "rate",
+                        min: 0,
                         step: "0.01",
                         presicion: 2,
                         textAlign: "text-end",
-                        value: props.item.itemPrice,
-                        id: props.item.itemId,
+                        value: item.rate,
+                        id: item.id,
                     }}
                 />
             </td>
             <td className="text-center" style={{ minWidth: "50px" }}>
                 <BiTrash
-                    onClick={onDelEvent}
+                    onClick={() => onDelete(item.id)}
                     style={{ height: "33px", width: "33px", padding: "7.5px" }}
                     className="text-white mt-1 btn btn-danger"
                 />

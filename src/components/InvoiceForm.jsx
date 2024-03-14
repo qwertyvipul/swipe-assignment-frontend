@@ -14,12 +14,23 @@ import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
+import { useProductsListData } from "../redux/hooks";
+
+const defaultItem = {
+    id: 0,
+    name: "",
+    description: "",
+    quantity: 0,
+    rate: 0,
+};
 
 const InvoiceForm = () => {
     const dispatch = useDispatch();
     const params = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const { productsList } = useProductsListData();
+
     const isCopy = location.pathname.includes("create");
     const isEdit = location.pathname.includes("edit");
 
@@ -54,46 +65,51 @@ const InvoiceForm = () => {
                   discountRate: "",
                   discountAmount: "0.00",
                   currency: "$",
-                  items: [
-                      {
-                          itemId: 0,
-                          itemName: "",
-                          itemDescription: "",
-                          itemPrice: "1.00",
-                          itemQuantity: 1,
-                      },
-                  ],
+                  items: [defaultItem],
               }
+    );
+
+    const addedItems = formData.items.map((item) => item.id);
+    const availableItems = productsList.filter(
+        (product) => !addedItems.includes(product.id)
     );
 
     useEffect(() => {
         handleCalculateTotal();
     }, []);
 
-    const handleRowDel = (itemToDelete) => {
-        const updatedItems = formData.items.filter(
-            (item) => item.itemId !== itemToDelete.itemId
-        );
+    const handleRowDelete = (id) => {
+        const updatedItems = formData.items.filter((item) => item.id !== id);
         setFormData({ ...formData, items: updatedItems });
         handleCalculateTotal();
     };
 
     const handleAddEvent = () => {
-        const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(
-            36
-        );
-        const newItem = {
-            itemId: id,
-            itemName: "",
-            itemDescription: "",
-            itemPrice: "1.00",
-            itemQuantity: 1,
-        };
-        setFormData({
-            ...formData,
-            items: [...formData.items, newItem],
+        if (!addedItems.includes(0) && availableItems.length > 0) {
+            setFormData({
+                ...formData,
+                items: [...formData.items, defaultItem],
+            });
+            handleCalculateTotal();
+        }
+    };
+
+    const disableAdd = addedItems.includes(0) || availableItems.length === 0;
+
+    const handleOptionSelect = (prevId, newId) => {
+        setFormData((prevData) => {
+            const newItems = prevData.items.map((item) => {
+                if (item.id === prevId) {
+                    return {
+                        ...productsList.find((product) => product.id === newId),
+                        quantity: 0,
+                    };
+                } else {
+                    return item;
+                }
+            });
+            return { ...prevData, items: newItems };
         });
-        handleCalculateTotal();
     };
 
     const handleCalculateTotal = () => {
@@ -102,8 +118,7 @@ const InvoiceForm = () => {
 
             prevFormData.items.forEach((item) => {
                 subTotal +=
-                    parseFloat(item.itemPrice).toFixed(2) *
-                    parseInt(item.itemQuantity);
+                    parseFloat(item.rate).toFixed(2) * parseInt(item.quantity);
             });
 
             const taxAmount = parseFloat(
@@ -130,7 +145,7 @@ const InvoiceForm = () => {
 
     const onItemizedItemEdit = (evt, id) => {
         const updatedItems = formData.items.map((oldItem) => {
-            if (oldItem.itemId === id) {
+            if (oldItem.id === id) {
                 return { ...oldItem, [evt.target.name]: evt.target.value };
             }
             return oldItem;
@@ -330,10 +345,13 @@ const InvoiceForm = () => {
                         </Row>
                         <InvoiceItem
                             onItemizedItemEdit={onItemizedItemEdit}
+                            onOptionSelect={handleOptionSelect}
                             onRowAdd={handleAddEvent}
-                            onRowDel={handleRowDel}
+                            onRowDelete={handleRowDelete}
                             currency={formData.currency}
                             items={formData.items}
+                            options={availableItems}
+                            disableAdd={disableAdd}
                         />
                         <Row className="mt-4 justify-content-end">
                             <Col lg={6}>
