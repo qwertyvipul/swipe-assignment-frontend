@@ -29,7 +29,6 @@ const defaultItem = {
 // Default values for new invoice
 const newInvoice = {
   currentDate: new Date().toLocaleDateString(),
-  invoiceNumber: nextInvoiceId(),
   dateOfIssue: "",
   billTo: "",
   billToEmail: "",
@@ -70,7 +69,7 @@ const InvoiceForm = () => {
           id: nextInvoiceId(),
           invoiceNumber: listSize + 1,
         }
-      : { ...newInvoice, id: nextInvoiceId() }
+      : { ...newInvoice, id: nextInvoiceId(), invoiceNumber: listSize + 1 }
   );
 
   const addedItems = formData.items.map((item) => item.id);
