@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-import ProductRow from "../pages/ProductRow";
+import ProductRow from "./ProductRow";
 
 const ProductsTable = ({ products }) => {
   console.log("Products table");

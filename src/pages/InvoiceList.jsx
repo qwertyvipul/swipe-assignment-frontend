@@ -3,7 +3,7 @@ import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useInvoiceListData } from "../redux/hooks";
-import InvoiceRow from "./InvoiceRow";
+import InvoiceRow from "../components/InvoiceRow";
 
 const InvoiceList = () => {
   const { invoiceList, getOneInvoice } = useInvoiceListData();
