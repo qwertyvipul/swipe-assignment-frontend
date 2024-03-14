@@ -15,7 +15,6 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
 import { useProductsListData } from "../redux/hooks";
-import { nextInvoiceId } from "../redux/invoicesSlice";
 
 // Default values from new item
 const defaultItem = {
@@ -66,10 +65,9 @@ const InvoiceForm = () => {
       : isCopy && params.id
       ? {
           ...getOneInvoice(params.id),
-          id: nextInvoiceId(),
           invoiceNumber: listSize + 1,
         }
-      : { ...newInvoice, id: nextInvoiceId(), invoiceNumber: listSize + 1 }
+      : { ...newInvoice, invoiceNumber: listSize + 1 }
   );
 
   const addedItems = formData.items.map((item) => item.id);

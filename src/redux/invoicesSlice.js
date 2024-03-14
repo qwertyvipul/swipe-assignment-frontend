@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { autoIncrement } from "../utils/generateAutoIncrementId";
 
-export const nextInvoiceId = autoIncrement();
+const nextInvoiceId = autoIncrement();
 
 // Format invoice to just list product ids to maintain single source of truth
 const formatInvoice = (invoice) => {
@@ -24,7 +24,7 @@ const invoicesSlice = createSlice({
   initialState: [],
   reducers: {
     addInvoice: (state, action) => {
-      state.push(formatInvoice(action.payload));
+      state.push({ ...formatInvoice(action.payload), id: nextInvoiceId() });
     },
     deleteInvoice: (state, action) => {
       return state.filter((invoice) => invoice.id !== action.payload);
