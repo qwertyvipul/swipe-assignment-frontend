@@ -2,8 +2,28 @@ import { useSelector } from "react-redux";
 import { selectInvoiceList } from "./invoicesSlice";
 import { selectProductList } from "./productsSlice";
 
+// Populate item ids with corresponding products
+const populateInvoiceWithProducts = (invoice, productsList) => {
+  const productsInInvoice = [];
+  const idQuantity = {}; // For O(1) data access
+
+  invoice.items.forEach((item) => {
+    idQuantity[item.id] = item.quantity;
+  });
+
+  productsList.forEach((product) => {
+    if (idQuantity.hasOwnProperty(product.id)) {
+      productsInInvoice.push({
+        ...product,
+        quantity: idQuantity[product.id],
+      });
+    }
+  });
+  return { ...invoice, items: productsInInvoice };
+};
+
 export const useInvoiceListData = () => {
-  const invoiceList = useSelector(selectInvoiceList);
+  const invoices = useSelector(selectInvoiceList);
   const productsList = useSelector(selectProductList);
 
   const getOneInvoice = (receivedId) => {
@@ -12,24 +32,12 @@ export const useInvoiceListData = () => {
         (invoice) => invoice.id.toString() === receivedId.toString()
       ) || null;
 
-    const productsInInvoice = [];
-    const idQuantity = {}; // For O(1) data access
-
-    invoice.items.forEach((item) => {
-      idQuantity[item.id] = item.quantity;
-    });
-
-    // Populate item ids with corresponding products
-    productsList.forEach((product) => {
-      if (idQuantity.hasOwnProperty(product.id)) {
-        productsInInvoice.push({
-          ...product,
-          quantity: idQuantity[product.id],
-        });
-      }
-    });
-    return { ...invoice, items: productsInInvoice };
+    return populateInvoiceWithProducts(invoice, productsList);
   };
+
+  const invoiceList = invoices.map((invoice) =>
+    populateInvoiceWithProducts(invoice, productsList)
+  );
 
   const listSize = invoiceList.length;
 
